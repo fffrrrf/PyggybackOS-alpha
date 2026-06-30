@@ -1,26 +1,30 @@
 #import the stuff
-#todo: fix raminf
+#quote of the update: "sorry ladies, im busy coding"
 
-#import keyboard
+import termios
+import select
 import psutil
 import sys
 import calculator_microapp
 import randomnumber_microapp
+import tty
+
+#i will leanr what this means later...
+fd = sys.stdin.fileno()
+old_settings = termios.tcgetattr
 
 print("boot")
-usrtrue = 0
-while not usrtrue:
+while True:
     usr = input("Enter your username: ")
     if len(usr) <= 10:
-        usrtrue = 1
+        break
     else: print("Username must be 10 or less characters.")
 #loop for it
-running = 1
-while running:
+while True:
     print('')
     cmd =  input(f"{usr}@pyggy:~$ ")
     if cmd == "ver":
-        print("alpha_0.12")
+        print("alpha_0.13")
     elif cmd == "raminf":
         mem = psutil.virtual_memory()
         print(mem.percent, "in use of", mem.total)
@@ -46,29 +50,28 @@ while running:
         print(usr)
     elif cmd == "run microapp":
         print("Which microapp do you want to run or type esc to exit")
-        mait = 0
-        while not mait:
+        while True:
             MATR = input("<run microapp>:~$ ")
             if MATR.lower() == "calculator":
-                mait = 1
+                break
                 calculator_microapp.calculation(usr)
             elif MATR.lower() == "esc":
-                mait = 1
+                break
             elif MATR.lower() == "rng":
-                mait = 1
+                break
                 randomnumber_microapp.getrandnum(usr)
             else:
                 print(f"Unkown microapp: {MATR}")
     elif cmd == "liveram":
-        ramactike = 1
-        bean = 1.0
-        while ramactike:
-            #this crap really annoyed me: its only temporarily fixed
+        while True:
+            tty.setcbreak(fd)
+            #this crap really damn annoyed me: its finally fixed
             mem = psutil.virtual_memory()
-            print(f"\rram: {mem.percent}%",
-            end="")
-            bean -= 0.00006
-            if bean <= 0:
-                ramactike = 0
+            print(f"\rram: {mem.percent}%", end="")
+            if select.select([sys.stdin], [], [], 0)[0]:
+               sys.stdin.read(1)  # consume the key
+               break
+               termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            
     else:
         print(f"Unkown command: {cmd}")
