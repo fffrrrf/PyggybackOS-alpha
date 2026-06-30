@@ -1,8 +1,7 @@
 #todo : add an "ans" feature and possibly more
 
 def calculation(usr):
-    correct=0
-    while not correct:
+    while True:
         print("Add")
         print("Subtract")
         print("Multiply")
@@ -10,24 +9,22 @@ def calculation(usr):
         print("What calculation type do you want to do?")
         type = input(f"{usr}@pyggy:~$ ")
         if type.lower() in ["add", "subtract", "divide", "multiply"]:
-            correct=1
+            break
         else: print("Unkown calculation type")
     print("What is the first number?")
-    tru = 0
-    while not tru:
+    while True:
         try:
             numberone = int(input(f"{usr}@pyggy:~$ "))
         except ValueError:
             print("That is not a number")
-        else: tru = 1
+        else: break
     print("What is the second number?")
-    tru = 0
-    while not tru:
+    while True:
         try:
             numbertwo = int(input(f"{usr}@pyggy:~$ "))
         except ValueError:
             print("That is not a number!")
-        else: tru = 1
+        else: break
     if type.lower() == "add":
         print(numberone + numbertwo)
     if type.lower() == "subtract":
