@@ -2,21 +2,19 @@ import random
 
 def getrandnum(usr):
     print("What is the first parameter?")
-    works = 0
-    while not works:
+    while True:
         try:
             firstpar = int(input(f"{usr}@pyggy:~$ "))
         except ValueError:
             print("That isn't a number.")
-        else: works = 1
+        else: break
     print("What is the second parameter?")
-    works = 0
-    while not works:
+    while True:
         try:
             secpar = int(input(f"{usr}@pyggy:~$ "))
         except ValueError:
             print("That isn't a number.")
-        else: works = 1
+        else: break
     try:
         randnum = random.randint(firstpar, secpar)
         print(f"Your random number between {firstpar} and {secpar} is {randnum}")
